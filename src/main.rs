@@ -3,11 +3,15 @@ use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 
 #[get("/tickets/current")]
 async fn current_ticket() -> impl Responder {
+    // TODO: get today private jwk
+    // TODO: generate jwt
     HttpResponse::Ok().body("Hello world!")
 }
 
 #[get("/jwks")]
 async fn jwks() -> impl Responder {
+    // TODO: get all jwk
+    // TODO: generate json array
     HttpResponse::Ok().body("/jwks")
 }
 
@@ -15,7 +19,6 @@ async fn jwks() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     println!("start");
     flexi_logger::Logger::with_env_or_str("debug")
-        .format(flexi_logger::detailed_format)
         .start()
         .unwrap();
 
