@@ -17,3 +17,4 @@ tokio = { version = "0.2", features = ["full"] }
 chrono = "0.4"
 url = "2.1"
 error-chain = "0.12"
+bytes = "0.5"

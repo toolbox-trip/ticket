@@ -1,25 +1,10 @@
 use actix_web::middleware::Logger;
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{App, HttpServer};
 
-mod ticket;
-
-struct State {
-    jgen_url: String,
-}
-
-#[get("/tickets/current")]
-async fn current_ticket(state: web::Data<State>, request: web::HttpRequest) -> impl Responder {
-    // TODO: get today private jwk
-    // TODO: generate jwt
-    HttpResponse::Ok().body(format!("{}\n{}", request.path(), &state.jgen_url))
-}
-
-#[get("/jwks")]
-async fn jwks() -> impl Responder {
-    // TODO: get all jwk
-    // TODO: generate json array
-    HttpResponse::Ok().body("/jwks")
-}
+mod error;
+mod handlers;
+mod model;
+mod utilities;
 
 /// env: RUST_LOG
 ///      JGEN_URL
@@ -37,14 +22,10 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .wrap(Logger::default())
-            .data(State {
-                // jgen_url: Option<String> = std::env::var("JGEN_URL").ok();
-                // memcached_url: Option<String> = std::env::var("MEMCACHED_URL").ok();
-                jgen_url: "http://localhost:5000".to_string(),
-            })
-            .service(current_ticket)
-            .service(jwks)
+            .data(model::ConfigContext::default())
+            .configure(handlers::v1::register)
     })
+    .workers(2)
     .bind("0.0.0.0:8080")?
     .run()
     .await

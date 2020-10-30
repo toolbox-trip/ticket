@@ -1848,6 +1848,7 @@ name = "ticket"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "bytes",
  "chrono",
  "error-chain",
  "flexi_logger",
