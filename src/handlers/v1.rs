@@ -5,7 +5,7 @@ use crate::error::Result;
 use crate::model;
 
 pub fn register(cfg: &mut ServiceConfig) {
-    cfg.service(web::scope("/v1").service(current_ticket).service(jwks));
+    cfg.service(current_ticket).service(jwks);
 }
 
 #[get("/tickets/current")]

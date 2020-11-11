@@ -1,5 +1,5 @@
 use actix_web::middleware::Logger;
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpServer};
 
 mod error;
 mod handlers;
@@ -23,7 +23,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Logger::default())
             .data(model::ConfigContext::default())
-            .configure(handlers::v1::register)
+            .service(web::scope("/v1").configure(handlers::v1::register))
     })
     .workers(2)
     .bind("0.0.0.0:8080")?
