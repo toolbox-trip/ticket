@@ -1,25 +1,15 @@
-ARCH = x86_64-unknown-linux-musl
 VERSION = latest
 NAME = ticket
 BASE = snail.azurecr.io
 
-toolchain:
-
-	rustup toolchain install stable-$(ARCH)
-	rustup target add $(ARCH)
-
-debug: toolchain
+debug:
 	@cargo build
 
-release: toolchain
-	@cargo build --release --target=$(ARCH)
+release:
+	@cargo build --release
 
 test:
 	@cargo test --verbose
 
-copy:
-	cp ./target/$(ARCH)/$(NAME) ./docker/
-
 docker: test release copy
-	@echo PLEASE RUN `make release` FIRST
 	@docker build --tag ${BASE}/$(NAME):$(VERSION) ./docker
