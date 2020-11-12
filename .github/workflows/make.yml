@@ -16,8 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Rust MUSL Builder
-      uses: NSCoder/rust-musl-action@v1.0.0
+    - name: prepare musl-tool
+      run: apt install musl-tool
     - name: test
       run: make test
     - name: build
