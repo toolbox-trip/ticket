@@ -12,4 +12,4 @@ test:
 	@cargo test --verbose
 
 docker:
-	@docker build --tag ${BASE}/$(NAME):$(VERSION)
+	@docker build --tag ${BASE}/$(NAME):$(VERSION) .
