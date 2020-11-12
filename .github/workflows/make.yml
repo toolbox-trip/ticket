@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: prepare musl-tool
-      run: sudo apt update && sudo apt search musl && sudo apt install musl-tools -y
+      run: sudo apt update && sudo apt install musl-tools pkg-config -y
     - name: test
       run: make test
     - name: build
