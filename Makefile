@@ -3,6 +3,7 @@ VERSION = latest
 NAME = ticket
 
 toolchain:
+	rustup toolchain install stable-$(ARCH)
 	rustup target add $(ARCH)
 
 debug: toolchain
