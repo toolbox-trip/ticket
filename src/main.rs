@@ -14,7 +14,7 @@ mod utilities;
 ///      DATABASE_PASSWORD
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("starting server on 8080");
+    println!("starting server on 8080...");
     flexi_logger::Logger::with_env_or_str("debug")
         .start()
         .unwrap();
