@@ -2,6 +2,8 @@ FROM rust:1.47.0-alpine3.12 as cargo-build
 
 WORKDIR /usr/src/ticket
 
+RUN apk add --no-cache -U musl-dev
+
 COPY . .
 
 RUN cargo build --release
