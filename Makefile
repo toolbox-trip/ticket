@@ -11,5 +11,5 @@ release:
 test:
 	@cargo test --verbose
 
-docker: test release copy
+docker:
 	@docker build --tag ${BASE}/$(NAME):$(VERSION) ./docker
