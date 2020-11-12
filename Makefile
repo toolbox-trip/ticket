@@ -12,6 +12,9 @@ debug: toolchain
 release: toolchain
 	@cargo build --release --target=$(ARCH)
 
+test:
+	@cargo test --verbose
+
 copy:
 	cp ./target/$(ARCH)/$(NAME) ./docker/
 
