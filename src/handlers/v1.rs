@@ -3,6 +3,7 @@ use actix_web::{get, HttpResponse, Responder};
 
 use crate::error::Result;
 use crate::model;
+use crate::utilities;
 
 pub fn register(cfg: &mut ServiceConfig) {
     cfg.service(current_ticket).service(jwks);
@@ -13,7 +14,7 @@ async fn current_ticket(
     state: web::Data<model::ConfigContext>,
     request: web::HttpRequest,
 ) -> Result<String> {
-    let token = crate::utilities::token::generate_token(&state).await?;
+    let token = utilities::token::generate_token(&state).await?;
     Ok(format!("{}\n{}", request.path(), token))
 }
 
