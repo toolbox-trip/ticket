@@ -6,7 +6,7 @@ RUN apk add --no-cache -U musl-dev openssl-dev
 
 COPY . .
 
-RUN cargo install --path . --root /user/local/bin/
+RUN cargo install --path . --root /user/local/
 
 FROM alpine:3.12
 
