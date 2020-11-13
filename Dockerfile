@@ -6,7 +6,7 @@ RUN apk add --no-cache -U musl-dev openssl-dev
 
 COPY . .
 
-RUN cargo install --path . --root /user/local/bin
+RUN cargo install --path . --root /user/local/bin/
 
 FROM alpine:3.12
 
@@ -14,4 +14,4 @@ COPY --from=cargo-build /user/local/bin/ticket /usr/local/bin/ticket
 
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/bin/ticket"]
+ENTRYPOINT ["ticket"]
