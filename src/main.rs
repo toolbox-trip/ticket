@@ -15,7 +15,7 @@ use actix_web::{web, App, HttpServer};
 //       DATABASE_PASSWORD
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    flexi_logger::Logger::with_env_or_str("debug")
+    flexi_logger::Logger::with_env_or_str("info")
         .start()
         .unwrap();
     log::info!("starting server on 8080...");
