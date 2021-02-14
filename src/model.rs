@@ -1,18 +1,22 @@
+use crate::jwk::JwkPemAccessor;
 use serde::{Deserialize, Serialize};
 
 pub struct ConfigContext {
-    jgen_url: String,
+    pub jgen_url: String,
+    pub redis_url: String,
+
+    pub jwk_accessor: JwkPemAccessor,
 }
 
 impl ConfigContext {
     pub fn default() -> Self {
+        let jgen_url = "http://localhost:8000";
+        let redis_url = "redis://localhost";
         ConfigContext {
-            jgen_url: "http://localhost:5000".to_string(),
+            jgen_url: jgen_url.to_owned(),
+            redis_url: redis_url.to_owned(),
+            jwk_accessor: JwkPemAccessor::new(jgen_url, redis_url),
         }
-    }
-
-    pub fn jgen_url(&self) -> String {
-        self.jgen_url.clone()
     }
 }
 
