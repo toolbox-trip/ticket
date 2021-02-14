@@ -1,22 +1,25 @@
 use crate::date;
 use anyhow::Result;
-use date::get_date;
 use redis::{Client, Commands, Connection};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::{borrow::BorrowMut, cell::RefCell, collections::HashMap, convert::TryFrom};
+use std::{cell::RefCell, convert::TryFrom};
 use url::Url;
 
 #[derive(Serialize, Deserialize)]
 pub struct B64Pem {
     pub public_jwk: Value,
+    pub private_jwk: Value,
     pub private_pem: String,
+    pub public_pem: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Pem {
     pub public_jwk: Value,
+    pub private_jwk: Value,
     pub private_pem: String,
+    pub public_pem: String,
 }
 
 impl TryFrom<B64Pem> for Pem {
@@ -25,6 +28,8 @@ impl TryFrom<B64Pem> for Pem {
     fn try_from(value: B64Pem) -> Result<Self, Self::Error> {
         Ok(Self {
             public_jwk: value.public_jwk,
+            private_jwk: value.private_jwk,
+            public_pem: String::from_utf8(base64::decode(value.public_pem)?)?,
             private_pem: String::from_utf8(base64::decode(value.private_pem)?)?,
         })
     }
@@ -89,16 +94,17 @@ impl JwkPemAccessor {
         }
     }
 
-    async fn get_select_pem(&self, offset: i64) -> Result<PeriodicalPem> {
+    async fn get_selected_pem(&self, offset: i64) -> Result<PeriodicalPem> {
         let d = date::get_date(offset);
         let mut periodical: Option<PeriodicalPem> = None;
         if let Ok(res) = self.get(d.as_str()) {
             if let Some(json_str) = res {
-                let pem = serde_json::from_str(json_str.as_str())?;
-                periodical = Some(PeriodicalPem {
-                    pem,
-                    timestamp: d.clone(),
-                });
+                if let Ok(pem) = serde_json::from_str(json_str.as_str()) {
+                    periodical = Some(PeriodicalPem {
+                        pem,
+                        timestamp: d.clone(),
+                    });
+                }
             }
         }
         if periodical.is_none() {
@@ -117,13 +123,13 @@ impl JwkPemAccessor {
     }
 
     pub async fn get_current_pem(&self) -> Result<PeriodicalPem> {
-        self.get_select_pem(0).await
+        self.get_selected_pem(0).await
     }
 
     pub async fn get_all_pem(&self) -> Result<Vec<PeriodicalPem>> {
         Ok(vec![
-            self.get_select_pem(0).await?,
-            self.get_select_pem(1).await?,
+            self.get_selected_pem(0).await?,
+            self.get_selected_pem(1).await?,
         ])
     }
 }
