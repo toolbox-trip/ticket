@@ -17,12 +17,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     # - name: test
     #   run: make test
+
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')${GITHUB_SHA:6}"
+
     - name: build
-      run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=$(date +'%Y%m%d%H%M%S')${GITHUB_SHA:6} docker
+      run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=${{ steps.date.outputs.tag }} docker
 
     - name: Publish to Registry
-      run: docker push $DOCKER_IMAGE_NAME --creds $CRED
+      run: docker push $DOCKER_IMAGE_NAME:${{ steps.date.outputs.tag }} --creds $CRED
       env:
         CRED: ${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_PASSWORD }}
