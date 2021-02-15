@@ -25,7 +25,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .wrap(Logger::default())
-            .data(model::ConfigContext::default())
+            .data(model::GlobalContext::default())
             .configure(handlers::register)
     })
     .bind("0.0.0.0:8080")?
