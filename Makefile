@@ -1,6 +1,6 @@
 VERSION = latest
 NAME = ticket
-BASE = snail.azurecr.io
+BASE = localhost
 
 debug:
 	@cargo build

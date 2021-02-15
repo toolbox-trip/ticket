@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  DOCKER_IMAGE_NAME: crownair/ticket
 
 jobs:
   build:
@@ -19,4 +20,9 @@ jobs:
     # - name: test
     #   run: make test
     - name: build
-      run: sudo make docker
+      run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=$(date +'%Y%m%d%H%M%S')${GITHUB_REF:6} docker
+
+    - name: Publish to Registry
+      run: docker push $DOCKER_IMAGE_NAME --creds $CRED
+      env:
+        CRED: ${{ secret.DOCKER_HUB_USERNAME }}:${{ secret.DOCKER_HUB_PASSWORD }}
