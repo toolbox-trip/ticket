@@ -25,4 +25,4 @@ jobs:
     - name: Publish to Registry
       run: docker push $DOCKER_IMAGE_NAME --creds $CRED
       env:
-        CRED: ${{ secret.DOCKER_HUB_USERNAME }}:${{ secret.DOCKER_HUB_PASSWORD }}
+        CRED: ${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_PASSWORD }}
