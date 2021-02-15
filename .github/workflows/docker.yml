@@ -23,7 +23,7 @@ jobs:
 
     - name: Get current date
       id: date
-      run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')${{ env.GITHUB_SHA:6 }}"
+      run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')${{ env.GITHUB_SHA:0:6 }}"
 
     - name: build
       run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=${{ steps.date.outputs.tag }} docker
