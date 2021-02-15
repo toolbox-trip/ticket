@@ -13,14 +13,14 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
     # - name: test
     #   run: make test
     - name: build
-      run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=$(date +'%Y%m%d%H%M%S')${GITHUB_REF:6} docker
+      run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=$(date +'%Y%m%d%H%M%S')${GITHUB_SHA:6} docker
 
     - name: Publish to Registry
       run: docker push $DOCKER_IMAGE_NAME --creds $CRED
