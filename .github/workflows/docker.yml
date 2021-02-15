@@ -9,7 +9,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   DOCKER_IMAGE_NAME: crownair/ticket
-  SHORT_SHA: ${{ env.GITHUB_SHA:6 }}
 
 jobs:
   build:
@@ -24,7 +23,7 @@ jobs:
 
     - name: Get current date
       id: date
-      run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')${SHORT_SHA}"
+      run: echo "::set-output name=tag::$(date +'%Y%m%d%H%M%S')${{ env.GITHUB_SHA:6 }}"
 
     - name: build
       run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=${{ steps.date.outputs.tag }} docker
