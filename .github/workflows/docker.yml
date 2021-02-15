@@ -28,7 +28,11 @@ jobs:
     - name: build
       run: make BASE=docker.io NAME=$DOCKER_IMAGE_NAME VERSION=${{ steps.date.outputs.tag }} docker
 
+    - name: docker login
+      run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
     - name: Publish to Registry
-      run: docker push $DOCKER_IMAGE_NAME:${{ steps.date.outputs.tag }} --creds $CRED
-      env:
-        CRED: ${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_PASSWORD }}
+      run: docker push $DOCKER_IMAGE_NAME:${{ steps.date.outputs.tag }}
+
+    - name: docker logout
+      run: docker logout
